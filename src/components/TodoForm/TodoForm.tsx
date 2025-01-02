@@ -1,10 +1,19 @@
 import s from './TodoForm.module.scss'
 
-const TodoForm = () => {
+// @ts-ignore
+const TodoForm = ({handleSubmit, newTodoValue, setNewTodoValue}) => {
    return (
-      <form className={s.form}>
-         <input className={s.input} type="text" placeholder="Task To Be Done..."/>
-         <button className={s.button}>Add</button>
+      <form onSubmit={handleSubmit} className={s.form}>
+         <input
+            value={newTodoValue}
+            onChange={(e) => setNewTodoValue(e.target.value)}
+            className={s.input}
+            maxLength={64}
+            minLength={2}
+            type="text"
+            placeholder="Task To Be Done..."
+         />
+         <button type='submit' className={s.button}>Add</button>
       </form>
    );
 };

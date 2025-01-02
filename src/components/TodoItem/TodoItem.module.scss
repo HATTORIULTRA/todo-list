@@ -4,7 +4,7 @@
   padding: 15px;
   border-radius: 5px;
   align-items: center;
-  box-shadow: 0px 5px 5px -5px rgba(34, 60, 80, 0.6);
+  box-shadow: 0 5px 5px -5px rgba(34, 60, 80, 0.6);
 
   .checkbox {
     appearance: none;
@@ -27,9 +27,21 @@
       }
     }
   }
+  .editInput {
+    background-color: inherit;
+    border:none;
+    border-bottom: 2px solid #a9a9a9;
+    padding: 13px 10px;
+    font-size: 18px;
+    outline: none;
+    margin-left: 10px;
+    width: 60%;
+  }
   .todoText {
     margin: 0 20px 0 20px;
     font-size: 18px;
+    color: black;
+
   }
   .btnGroup {
     margin-left: auto;
