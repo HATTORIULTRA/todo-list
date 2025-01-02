@@ -1,5 +1,7 @@
 .form {
   margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
 }
 .form .input {
   background-color: inherit;
@@ -8,7 +10,7 @@
   padding: 13px 10px;
   font-size: 18px;
   outline: none;
-  width: 80%;
+  width: 60%;
   margin-right: 10px;
 }
 .form .button {

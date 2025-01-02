@@ -8,6 +8,7 @@
   .item {
     cursor: pointer;
     transition: all .2s ease-in-out;
+    color: darkgrey;
     &:hover {
       color: #ff607b;
     }

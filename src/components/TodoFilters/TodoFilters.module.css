@@ -8,6 +8,7 @@
 .list .item {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  color: darkgrey;
 }
 .list .item:hover {
   color: #ff607b;

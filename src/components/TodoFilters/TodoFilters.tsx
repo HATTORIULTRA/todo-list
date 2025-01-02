@@ -1,14 +1,19 @@
 import s from './TodoFilters.module.scss'
 
-const TodoFilters = () => {
-   const filters = ['Все', 'в работе', 'сделано'];
+// @ts-ignore
+const TodoFilters = ({selectedFilter, handleClickSelect, filtersArray}) => {
 
+
+
+   // @ts-ignore
    return (
       <ul className={s.list}>
-         {filters.map((item, i) => (
-            <li key={i} className={`${s.item} ${s.active}`}>
-               {item}
-               <span>(5)</span>
+         {/* @ts-ignore */}
+         {filtersArray.map((item, i) => (
+            <li key={i} onClick={() => handleClickSelect(i)}
+                className={`${s.item} ${selectedFilter === i ? s.active : ''}`}>
+               {item.name}
+               <span>({item.count})</span>
             </li>
          ))}
       </ul>
