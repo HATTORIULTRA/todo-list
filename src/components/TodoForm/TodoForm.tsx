@@ -1,7 +1,13 @@
 import s from './TodoForm.module.scss'
+import {FC, FormEvent} from "react";
 
-// @ts-ignore
-const TodoForm = ({handleSubmit, newTodoValue, setNewTodoValue}) => {
+interface TodoFormProps {
+   handleSubmit: (e: FormEvent) => void
+   newTodoValue: string
+   setNewTodoValue: (e: string) => void
+}
+
+const TodoForm: FC<TodoFormProps> = ({handleSubmit, newTodoValue, setNewTodoValue}) => {
    return (
       <form onSubmit={handleSubmit} className={s.form}>
          <input

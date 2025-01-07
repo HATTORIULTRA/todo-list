@@ -1,18 +1,41 @@
 import {FaPenToSquare, FaTrashCan, FaCheck, FaXmark} from "react-icons/fa6";
-import s from './TodoItem.module.scss'
+import s from './TodoItem.module.scss';
+import {FC, ReactNode} from "react";
 
-// @ts-ignore
-const TodoItem = ({id, title, isDone, deleteTodo, completeTodo, editTodoText, editedTodoValue, setEditedTodoValue, todoIdForEdit, setTodoIdForEdit}) => {
+interface TodoItemProps {
+   id: number;
+   title: string;
+   isDone: boolean;
+   deleteTodo: (id: number) => void;
+   editTodoText: (id: number) => void;
+   completeTodo: (id: number) => void;
+   editedTodoValue: string;
+   setEditedTodoValue: (value: string) => void;
+   todoIdForEdit: number | null;
+   setTodoIdForEdit: (id: number | null) => void;
+}
+
+const TodoItem: FC<TodoItemProps> = ({
+                         id,
+                         title,
+                         isDone,
+                         deleteTodo,
+                         completeTodo,
+                         editTodoText,
+                         editedTodoValue,
+                         setEditedTodoValue,
+                         todoIdForEdit,
+                         setTodoIdForEdit
+                      }): ReactNode => {
 
    const isEditing = todoIdForEdit === id;
 
    const onEditClick = () => {
-      console.log(id)
       setTodoIdForEdit(id);
    }
 
-   const onAcceptClick = () => {
-      editTodoText();
+   const onAcceptClick = (id: number) => {
+      editTodoText(id);
       setTodoIdForEdit(null);
    }
 
@@ -27,18 +50,19 @@ const TodoItem = ({id, title, isDone, deleteTodo, completeTodo, editTodoText, ed
 
    return (
       <li className={s.todoItem}>
-         <input onClick={completeTodo} defaultChecked={isDone} className={s.checkbox} type="checkbox"/>
+         <input onClick={() => completeTodo(id)} defaultChecked={isDone} className={s.checkbox} type="checkbox"/>
 
          {isEditing
-            ? (<input value={editedTodoValue} onChange={(e) => setEditedTodoValue(e.target.value)} className={s.editInput} type="text" placeholder='new text' autoFocus/>)
-            : (/* @ts-ignore */
-               <h3 style={isDone ? completedStyles : null} className={s.todoText}>
+            ? (<input value={editedTodoValue} onChange={(e) => setEditedTodoValue(e.target.value)}
+                      className={s.editInput} type="text" placeholder='new text' autoFocus/>)
+            : (
+               <h3 style={isDone ? completedStyles : undefined} className={s.todoText}>
                   {title}
                </h3>)
          }
          {isEditing
             ? (<div className={s.btnGroup}>
-               <button onClick={onAcceptClick} className={s.rewriteBtn}>
+               <button onClick={() => onAcceptClick(id)} className={s.rewriteBtn}>
                   <FaCheck className={s.btnIcon}/>
                </button>
                <button onClick={onCancelClick} className={s.deleteBtn}>
@@ -49,7 +73,7 @@ const TodoItem = ({id, title, isDone, deleteTodo, completeTodo, editTodoText, ed
                <button onClick={onEditClick} className={s.rewriteBtn}>
                   <FaPenToSquare className={s.btnIcon}/>
                </button>
-               <button onClick={deleteTodo} className={s.deleteBtn}>
+               <button onClick={() => deleteTodo(id)} className={s.deleteBtn}>
                   <FaTrashCan className={s.btnIcon}/>
                </button>
             </div>)

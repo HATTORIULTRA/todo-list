@@ -1,22 +1,22 @@
+import {FC, FormEvent, ReactNode, useEffect, useState} from "react";
+
 import TodoForm from "./components/TodoForm/TodoForm.tsx";
 import TodoList from "./components/TodoList/TodoList.tsx";
-import {useEffect, useState} from "react";
 import TodoFilters from "./components/TodoFilters/TodoFilters.tsx";
+import {Filters, MetaResponse, Todo, TodoInfo, TodoRequest} from "./types/types.ts";
 
 const BASE_URL = 'https://easydev.club/api/v1';
 
-function App() {
-   const [todos, setTodos] = useState([]);
-   const [isLoading, setIsLoading] = useState(true);
-   const [newTodoValue, setNewTodoValue] = useState('');
-   const [editedTodoValue, setEditedTodoValue] = useState('');
-   const [selectedFilter, setSelectedFilter] = useState(0);
+const App: FC = (): ReactNode => {
+   const [todos, setTodos] = useState<Todo[]>([]);
+   const [isLoading, setIsLoading] = useState<boolean>(true);
+   const [newTodoValue, setNewTodoValue] = useState<string>('');
+   const [editedTodoValue, setEditedTodoValue] = useState<string>('');
+   const [selectedFilter, setSelectedFilter] = useState<number>(0);
 
-   const filtersArray = [
+   const filtersArray: Filters[] = [
       {name: 'Все', count: todos.length},
-      // @ts-ignore
       {name: 'в работе', count: todos.filter(todo => todo.isDone === false).length},
-      // @ts-ignore
       {name: 'сделано', count: todos.filter(todo => todo.isDone === true).length}
    ];
 
@@ -25,47 +25,46 @@ function App() {
    let selectedTasks = todos;
 
    if (filter === filtersArray[1].name) {
-      // @ts-ignore
       selectedTasks = todos.filter(todo => todo.isDone === false)
    }
 
    if (filter === filtersArray[2].name) {
-      // @ts-ignore
       selectedTasks = todos.filter(todo => todo.isDone === true)
    }
 
-   const fetchTodos = async () => {
+   const fetchTodos = async (): Promise<void> => {
       const response = await fetch(`${BASE_URL}/todos`);
-      const metaResponse = await response.json();
-      const todosData = await metaResponse.data;
+      const metaResponse: MetaResponse<Todo, TodoInfo> = await response.json();
+      const todosData = metaResponse.data;
       setTodos(todosData);
       setIsLoading(false);
    }
 
-   const handleSubmit = async (e: any) => {
+   const handleSubmit = async (e: FormEvent): Promise<void> => {
       e.preventDefault();
+
+      const newRequest: TodoRequest = {
+         "isDone": false,
+         "title": newTodoValue
+      }
 
       if (newTodoValue.length > 2 && newTodoValue.length < 64) {
          await fetch(`${BASE_URL}/todos`, {
             method: 'POST',
-            body: JSON.stringify({
-               "isDone": false,
-               "title": newTodoValue
-            }),
+            body: JSON.stringify(newRequest),
             headers: {
                'Content-type': 'application/json'
             },
          })
             .then(res => res.json())
             .then(data => {
-               // @ts-ignore
                setTodos(prevState => [...prevState, data])
             });
       }
-      setNewTodoValue('')
+      setNewTodoValue('');
    }
 
-   const deleteTodo = async (id: number) => {
+   const deleteTodo = async (id: number): Promise<void> => {
       console.log(id);
       await fetch(`${BASE_URL}/todos/${id}`, {
          method: 'DELETE',
@@ -75,44 +74,38 @@ function App() {
       })
          .then((res) => {
             if (res.status === 200) {
-               // @ts-ignore
                setTodos(prevState => [...prevState.filter(item => item.id !== id)])
             }
          })
    }
 
-   const completeTodo = async (id: number) => {
-      // @ts-ignore
+   const completeTodo = async (id: number): Promise<void> => {
       setTodos(todos.map(todo => {
-         // @ts-ignore
+         const newRequest: TodoRequest = {...todo, isDone: !todo.isDone}
          if (todo.id === id) {
             fetch(`${BASE_URL}/todos/${id}`, {
                method: 'PUT',
-               // @ts-ignore
-               body: JSON.stringify({...todo, isDone: !todo.isDone}),
+
+               body: JSON.stringify(newRequest),
                headers: {
                   'Content-type': 'application/json'
                },
             })
-            // @ts-ignore
             return {...todo, isDone: !todo.isDone}
          }
          return todo;
-      }))
+      }));
    }
 
    const editTodoText = async (id: number) => {
-      // @ts-ignore
       setTodos(todos.map(todo => {
-         // @ts-ignore
          if (todo.id === id) {
             if (editedTodoValue.length > 2 && editedTodoValue.length < 64) {
-               // @ts-ignore
+               const newRequest: TodoRequest = {...todo, title: editedTodoValue};
                todo.title = editedTodoValue
                fetch(`${BASE_URL}/todos/${id}`, {
                   method: 'PUT',
-                  // @ts-ignore
-                  body: JSON.stringify({...todo, title: editedTodoValue}),
+                  body: JSON.stringify(newRequest),
                   headers: {
                      'Content-type': 'application/json'
                   },
@@ -135,7 +128,6 @@ function App() {
 
    return (
       <div className='app'>
-         {/* @ts-ignore*/}
          <TodoForm
             handleSubmit={handleSubmit}
             newTodoValue={newTodoValue}
