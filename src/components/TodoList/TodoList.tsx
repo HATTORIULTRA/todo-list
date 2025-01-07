@@ -1,16 +1,32 @@
-import s from './TodoList.module.scss'
+import {FC, ReactNode, useState} from "react";
+import {Todo} from "../../types/types.ts";
+import s from "./TodoList.module.scss";
 import TodoItem from "../TodoItem/TodoItem.tsx";
-import {useState} from "react";
 
-// @ts-ignore
-const TodoList = ({todos, deleteTodo, completeTodo, editTodoText, editedTodoValue, setEditedTodoValue}) => {
-   const [todoIdForEdit, setTodoIdForEdit] = useState(null)
+interface TodoListProps {
+   todos: Todo[];
+   deleteTodo: (id: number) => void;
+   editTodoText: (id: number) => void;
+   completeTodo: (id: number) => void;
+   editedTodoValue: string;
+   setEditedTodoValue: (value: string) => void;
+}
+
+const TodoList: FC<TodoListProps> = ({
+                                        todos,
+                                        deleteTodo,
+                                        completeTodo,
+                                        editTodoText,
+                                        editedTodoValue,
+                                        setEditedTodoValue,
+                                     }): ReactNode => {
+   const [todoIdForEdit, setTodoIdForEdit] = useState<number | null>(null);
 
    return (
       <ul className={s.todoList}>
-         {/* @ts-ignore */}
-         {todos.map(item => (
+         {todos.map((item) => (
             <TodoItem
+               key={item.id}
                completeTodo={() => completeTodo(item.id)}
                deleteTodo={() => deleteTodo(item.id)}
                editTodoText={() => editTodoText(item.id)}
@@ -18,7 +34,6 @@ const TodoList = ({todos, deleteTodo, completeTodo, editTodoText, editedTodoValu
                setEditedTodoValue={setEditedTodoValue}
                todoIdForEdit={todoIdForEdit}
                setTodoIdForEdit={setTodoIdForEdit}
-               key={item.id}
                {...item}
             />
          ))}
