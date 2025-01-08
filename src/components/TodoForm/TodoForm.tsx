@@ -1,4 +1,4 @@
-import {FC, FormEvent} from "react";
+import {FC, FormEvent, ReactNode} from "react";
 import s from './TodoForm.module.scss'
 
 interface TodoFormProps {
@@ -10,11 +10,11 @@ interface TodoFormProps {
    formError: string
 }
 
-const TodoForm: FC<TodoFormProps> = ({handleSubmit, newTodoValue, setNewTodoValue, formDirty, setFormDirty, formError}) => {
+const TodoForm: FC<TodoFormProps> = ({handleSubmit, newTodoValue, setNewTodoValue, formDirty, setFormDirty, formError}): ReactNode => {
 
    const blurHandler = (e: FormEvent): void => {
      if(e.target) {
-      setFormDirty(true)
+      setFormDirty(true);
      }
    }
 
@@ -31,9 +31,8 @@ const TodoForm: FC<TodoFormProps> = ({handleSubmit, newTodoValue, setNewTodoValu
             />
             <button type='submit' className={s.button}>Add</button>
          </form>
-         {formDirty && (<div className={s.validation}>{formError}</div>)}
+         {formDirty && newTodoValue.length < 2 && (<div className={s.validation}>{formError}</div>)}
       </div>
-
    );
 };
 
