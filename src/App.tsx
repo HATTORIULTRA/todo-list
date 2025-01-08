@@ -13,6 +13,8 @@ const App: FC = (): ReactNode => {
    const [newTodoValue, setNewTodoValue] = useState<string>('');
    const [editedTodoValue, setEditedTodoValue] = useState<string>('');
    const [selectedFilter, setSelectedFilter] = useState<number>(0);
+   const [formDirty, setFormDirty] = useState<boolean>(false);
+   const [formError, setFormError] = useState<string>('Поле должно быть заполнено');
 
    const filtersArray: Filters[] = [
       {name: 'Все', count: todos.length},
@@ -48,7 +50,11 @@ const App: FC = (): ReactNode => {
          "title": newTodoValue
       }
 
-      if (newTodoValue.length > 2 && newTodoValue.length < 64) {
+      const re = /^[a-zA-Z0-9а-яА-ЯёЁ.,!?() ]{2,64}$/;
+
+      if(!re.test(newTodoValue)) {
+         setFormError('Задача должна содержать от 2 до 64 символов и не иметь запрещённых символов')
+      } else {
          await fetch(`${BASE_URL}/todos`, {
             method: 'POST',
             body: JSON.stringify(newRequest),
@@ -60,8 +66,9 @@ const App: FC = (): ReactNode => {
             .then(data => {
                setTodos(prevState => [...prevState, data])
             });
+         setNewTodoValue('');
+         setFormError('');
       }
-      setNewTodoValue('');
    }
 
    const deleteTodo = async (id: number): Promise<void> => {
@@ -100,7 +107,7 @@ const App: FC = (): ReactNode => {
    const editTodoText = async (id: number) => {
       setTodos(todos.map(todo => {
          if (todo.id === id) {
-            if (editedTodoValue.length > 2 && editedTodoValue.length < 64) {
+            if (editedTodoValue.length >= 2 && editedTodoValue.length <= 64) {
                const newRequest: TodoRequest = {...todo, title: editedTodoValue};
                todo.title = editedTodoValue
                fetch(`${BASE_URL}/todos/${id}`, {
@@ -132,6 +139,9 @@ const App: FC = (): ReactNode => {
             handleSubmit={handleSubmit}
             newTodoValue={newTodoValue}
             setNewTodoValue={setNewTodoValue}
+            formDirty={formDirty}
+            setFormDirty={setFormDirty}
+            formError={formError}
          />
          <TodoFilters
             handleClickSelect={handleClickSelect}
