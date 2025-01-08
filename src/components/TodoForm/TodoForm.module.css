@@ -1,9 +1,16 @@
-.form {
-  margin-bottom: 20px;
+.formWrapper {
+  margin-bottom: 40px;
+  position: relative;
+}
+.formWrapper .validation {
+  position: absolute;
+  color: red;
+}
+.formWrapper .form {
   display: flex;
   justify-content: space-between;
 }
-.form .input {
+.formWrapper .form .input {
   background-color: inherit;
   border: none;
   border-bottom: 2px solid #a9a9a9;
@@ -13,7 +20,7 @@
   width: 60%;
   margin-right: 10px;
 }
-.form .button {
+.formWrapper .form .button {
   background-color: #5394fe;
   width: 130px;
   height: 50px;
@@ -22,7 +29,7 @@
   border-radius: 10px;
   transition: all 0.2s ease-in-out;
 }
-.form .button:hover {
+.formWrapper .form .button:hover {
   filter: brightness(1.15);
 }
 

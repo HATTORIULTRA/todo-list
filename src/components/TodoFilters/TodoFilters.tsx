@@ -1,14 +1,16 @@
-import s from './TodoFilters.module.scss'
+import {FC, ReactNode} from "react";
+import s from './TodoFilters.module.scss';
+import {Filters} from "../../types/types.ts";
 
-// @ts-ignore
-const TodoFilters = ({selectedFilter, handleClickSelect, filtersArray}) => {
+interface TodoFiltersProps {
+   selectedFilter: number;
+   handleClickSelect: (i: number) => void;
+   filtersArray: Filters[];
+}
 
-
-
-   // @ts-ignore
+const TodoFilters: FC<TodoFiltersProps> = ({selectedFilter, handleClickSelect, filtersArray}): ReactNode => {
    return (
       <ul className={s.list}>
-         {/* @ts-ignore */}
          {filtersArray.map((item, i) => (
             <li key={i} onClick={() => handleClickSelect(i)}
                 className={`${s.item} ${selectedFilter === i ? s.active : ''}`}>
