@@ -129,7 +129,7 @@ const App: FC = (): ReactNode => {
 
    useEffect(() => {
       fetchTodos();
-   }, []);
+   }, [selectedFilter]);
 
    const handleClickSelect = (i: number = 0) => {
       setSelectedFilter(i);
