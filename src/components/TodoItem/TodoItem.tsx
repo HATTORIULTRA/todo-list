@@ -28,6 +28,7 @@ const TodoItem: FC<TodoItemProps> = ({
    const isEditing: boolean = todoIdForEdit === id;
 
    const onEditClick = (): void => {
+      setEditedTodoValue(title)
       setTodoIdForEdit(id);
       setLocalEditedValue(title);
    };
